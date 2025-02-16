@@ -3,30 +3,27 @@ name: Maven Build and Deploy
 on:
   push:
     branches:
-      - main   # или другая ветка, в которую ты пушишь изменения
+      - main
   pull_request:
     branches:
-      - main   # или другая ветка
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout репозитория
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Настройка JDK
       - name: Set up JDK 21
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@2
         with:
           java-version: '21'
-          distribution: 'adoptopenjdk'
+          distribution: 'zulu'  # используй 'zulu' вместо 'adoptopenjdk'
 
-      # Запуск Maven для сборки и публикации пакета
       - name: Build and Deploy with Maven
         run: |
-          mvn clean deploy --settings C:\Users\stasm\.m2\settings.xml  # указываем путь к settings.xml
+          mvn clean deploy --settings .github/maven/settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Токен для аутентификации на GitHub Packages
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
