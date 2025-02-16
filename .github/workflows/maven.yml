@@ -27,6 +27,5 @@ jobs:
           mvn clean deploy --settings .github/maven/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Build and deploy
-        run: mvn deploy -X
+
+      
