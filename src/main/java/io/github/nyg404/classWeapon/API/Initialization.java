@@ -14,6 +14,10 @@ public class Initialization {
         initialization.init();
     }
 
+    public void Create_table(){
+        initialization.createTabls();
+    }
+
 
     public void close(){
         initialization.close();
