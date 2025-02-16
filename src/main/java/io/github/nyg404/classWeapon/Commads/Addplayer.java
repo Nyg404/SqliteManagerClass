@@ -12,11 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Addplayer implements CommandExecutor {
-    private final SqliteManager sqliteManager;
 
-    public Addplayer(SqliteManager sqliteManager) {
-        this.sqliteManager = sqliteManager;
-    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -36,7 +32,7 @@ public class Addplayer implements CommandExecutor {
         }
 
         for (Player matched : matchedPlayers) {
-            sqliteManager.addplayer(matched);
+            SqliteManager.getInstance().addplayer(matched);
             sender.sendMessage("Игрок " + matched.getName() + " добавлен в базу данных.");
         }
 

@@ -8,11 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 public class AdminCreateclass implements CommandExecutor {
-    private final SqliteManager sqliteManager;
-
-    public AdminCreateclass(SqliteManager sqliteManager) {
-        this.sqliteManager = sqliteManager;
-    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -23,7 +18,7 @@ public class AdminCreateclass implements CommandExecutor {
 
         String nameclass = args[0];
 
-        if (sqliteManager.newclass(nameclass)) {
+        if (SqliteManager.getInstance().newclass(nameclass)) {
             sender.sendMessage(ChatColor.GREEN + "Класс " + nameclass + " успешно создан!");
             return true;
         } else {

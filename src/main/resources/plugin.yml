@@ -4,6 +4,8 @@ main: io.github.nyg404.classWeapon.ClassWeapon
 api-version: '1.21'
 authors: [ Nagust ]
 description: Просто плагин minecraft
+depend:
+  - TailsLib
 commands:
   admincreateclass:
   adminaddplayer:

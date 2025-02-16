@@ -3,8 +3,10 @@ package io.github.nyg404.classWeapon.Sqlite;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.thisistails.tailslib.Tools.YAMLManager;
 
 import java.sql.*;
 
@@ -12,16 +14,26 @@ public class SqliteManager {
     
 
     private HikariDataSource dataSource;
-    private final JavaPlugin plugin;
 
-    public SqliteManager(JavaPlugin plugin){
-        this.plugin = plugin;
+    private static SqliteManager instance = null;
+
+    static {
+        instance = new SqliteManager();
+    }
+
+    public static SqliteManager getInstance(){
+        return instance;
+    }
+
+    private SqliteManager(){
         init();
     }
 
 
+
+
     public void init(){
-        FileConfiguration configuration = plugin.getConfig();
+        FileConfiguration configuration = YAMLManager.require("classundweapon", "config.yml");
         String dbType = configuration.getString("database.type", "sqlite");
 
         HikariConfig hikariConfig = new HikariConfig();
@@ -48,7 +60,7 @@ public class SqliteManager {
             this.dataSource = new HikariDataSource(hikariConfig);
 
         } else {
-            String dbFile = plugin.getDataFolder() + "/" + configuration.getString("database.sqlite.file");
+            String dbFile = YAMLManager.getAndTranslateString("classundweapon", "config.yml", "database.sqlite.file");
             hikariConfig.setJdbcUrl("jdbc:sqlite:" + dbFile);
             hikariConfig.setDriverClassName("org.sqlite.JDBC");
         }
@@ -97,6 +109,7 @@ public class SqliteManager {
             e.printStackTrace();
         }
     }
+
     public boolean newclass(String nameClass){
         String newclass = "INSERT INTO player_classes(class_name) VALUES(?)";
         try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(newclass)) {
@@ -129,185 +142,185 @@ public class SqliteManager {
             e.printStackTrace();
         }
     }
-
-
-    public int return_current_xp(Player player){
-        String return_current_xp = "SELECT current_xp FROM player_stats WHERE uuid = ?";
-        int current_xp = 0;
-        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(return_current_xp)) {
-            statement.setString(1, player.getUniqueId().toString());
-            ResultSet resultSet = statement.executeQuery();
-
-            if(resultSet.next()){
-                current_xp = resultSet.getInt("current_xp");
-            }
-
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return current_xp;
-    }
-
-    public int return_required_xp(Player player){
-        String return_required_xp = "SELECT required_xp FROM player_stats WHERE uuid = ?";
-        int required_xp = 0;
-        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(return_required_xp)) {
-            statement.setString(1, player.getUniqueId().toString());
-            ResultSet resultSet = statement.executeQuery();
-
-            if(resultSet.next()){
-                required_xp = resultSet.getInt("required_xp");
-            }
-
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return required_xp;
-    }
-
-    public int return_level(Player player){
-        String return_level = "SELECT level FROM player_stats WHERE uuid = ?";
-        int level = 0;
-        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(return_level)) {
-            statement.setString(1, player.getUniqueId().toString());
-            ResultSet resultSet = statement.executeQuery();
-
-            if(resultSet.next()){
-                level = resultSet.getInt("level");
-            }
-
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return level;
-    }
-
-    public String return_class(Player player) {
-        String return_class = "SELECT class_name FROM player_classes " +
-                "JOIN players ON players.id_class = player_classes.id " +
-                "WHERE players.uuid = ?";
-        String playerClass = null;
-
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(return_class)) {
-
-            statement.setString(1, player.getUniqueId().toString());
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                playerClass = resultSet.getString("class_name");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return playerClass;
-    }
-
-
-
-    public int check_level(Player player) {
-        int current_xp = return_current_xp(player); // Получаем текущий опыт
-        int required_xp = return_required_xp(player); // Получаем требуемый опыт для следующего уровня
-        int level = return_level(player); // Получаем текущий уровень игрока
-
-        // Проверяем, достиг ли игрок максимального уровня
-        if (level >= 100) {
-            return level; // Если уровень 100 или выше, ничего не делаем
-        }
-
-        // Пока опыта хватает для повышения хотя бы одного уровня
-        while (current_xp >= required_xp && level < 100) {
-            current_xp -= required_xp; // Уменьшаем опыт на количество, потраченное на уровень
-            level++; // Повышаем уровень
-
-            required_xp = (int) Math.ceil(required_xp * 1.01); // Увеличиваем требуемый опыт для следующего уровня
-
-            // Если достигли максимального уровня, сбрасываем лишний опыт
-        }
-
-        if (level >= 100) {
-            level = 100;
-            current_xp = 0; // Чтобы не было накопленного опыта выше лимита
-        }
-
-        // Обновляем данные в базе
-        String updateQuery = "UPDATE player_stats SET level = ?, current_xp = ?, required_xp = ? WHERE uuid = ?";
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(updateQuery)) {
-            statement.setInt(1, level);
-            statement.setInt(2, current_xp);
-            statement.setInt(3, required_xp);
-            statement.setString(4, player.getUniqueId().toString());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return level;
-    }
-
-
-
-
-    public void add_current_xp(Player player, int addxp) {
-        String add_current_xp = "UPDATE player_stats SET current_xp = current_xp + ? WHERE uuid = ?";
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(add_current_xp)) {
-
-            // Получаем текущее значение опыта игрока из базы данных
-            int current_xp = return_current_xp(player);
-
-            // Добавляем новый опыт
-            int new_current_xp = current_xp + addxp;
-
-            // Устанавливаем параметры для SQL запроса
-            statement.setInt(1, addxp);  // Добавляем новый опыт, а не текущее значение
-            statement.setString(2, player.getUniqueId().toString());
-
-            // Выполняем обновление
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addXpAndCheckLevel(Player player, int addXp) {
-        String query = "SELECT current_xp, required_xp, level FROM player_stats WHERE uuid = ?";
-        String updateQuery = "UPDATE player_stats SET current_xp = ?, level = ?, required_xp = ? WHERE uuid = ?";
-
-        try (Connection connection = getConnection();
-             PreparedStatement selectStatement = connection.prepareStatement(query);
-             PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
-
-            // Получаем текущие значения
-            selectStatement.setString(1, player.getUniqueId().toString());
-            ResultSet resultSet = selectStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int currentXp = resultSet.getInt("current_xp") + addXp;
-                int requiredXp = resultSet.getInt("required_xp");
-                int level = resultSet.getInt("level");
-
-                // Проверяем, можно ли повысить уровень
-                while (currentXp >= requiredXp && level < 100) {
-
-                    level++;
-                    requiredXp = (int) Math.ceil(requiredXp * 1.5);
-                }
-
-                // Обновляем данные в БД
-                updateStatement.setInt(1, currentXp);
-                updateStatement.setInt(2, level);
-                updateStatement.setInt(3, requiredXp);
-                updateStatement.setString(4, player.getUniqueId().toString());
-                updateStatement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
+//
+//
+//    public int return_current_xp(Player player){
+//        String return_current_xp = "SELECT current_xp FROM player_stats WHERE uuid = ?";
+//        int current_xp = 0;
+//        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(return_current_xp)) {
+//            statement.setString(1, player.getUniqueId().toString());
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            if(resultSet.next()){
+//                current_xp = resultSet.getInt("current_xp");
+//            }
+//
+//        }catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return current_xp;
+//    }
+//
+//    public int return_required_xp(Player player){
+//        String return_required_xp = "SELECT required_xp FROM player_stats WHERE uuid = ?";
+//        int required_xp = 0;
+//        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(return_required_xp)) {
+//            statement.setString(1, player.getUniqueId().toString());
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            if(resultSet.next()){
+//                required_xp = resultSet.getInt("required_xp");
+//            }
+//
+//        }catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return required_xp;
+//    }
+//
+//    public int return_level(Player player){
+//        String return_level = "SELECT level FROM player_stats WHERE uuid = ?";
+//        int level = 0;
+//        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(return_level)) {
+//            statement.setString(1, player.getUniqueId().toString());
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            if(resultSet.next()){
+//                level = resultSet.getInt("level");
+//            }
+//
+//        }catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return level;
+//    }
+//
+//    public String return_class(Player player) {
+//        String return_class = "SELECT class_name FROM player_classes " +
+//                "JOIN players ON players.id_class = player_classes.id " +
+//                "WHERE players.uuid = ?";
+//        String playerClass = null;
+//
+//        try (Connection connection = getConnection();
+//             PreparedStatement statement = connection.prepareStatement(return_class)) {
+//
+//            statement.setString(1, player.getUniqueId().toString());
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            if (resultSet.next()) {
+//                playerClass = resultSet.getString("class_name");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return playerClass;
+//    }
+//
+//
+//
+//    public int check_level(Player player) {
+//        int current_xp = return_current_xp(player); // Получаем текущий опыт
+//        int required_xp = return_required_xp(player); // Получаем требуемый опыт для следующего уровня
+//        int level = return_level(player); // Получаем текущий уровень игрока
+//
+//        // Проверяем, достиг ли игрок максимального уровня
+//        if (level >= 100) {
+//            return level; // Если уровень 100 или выше, ничего не делаем
+//        }
+//
+//        // Пока опыта хватает для повышения хотя бы одного уровня
+//        while (current_xp >= required_xp && level < 100) {
+//            current_xp -= required_xp; // Уменьшаем опыт на количество, потраченное на уровень
+//            level++; // Повышаем уровень
+//
+//            required_xp = (int) Math.ceil(required_xp * 1.01); // Увеличиваем требуемый опыт для следующего уровня
+//
+//            // Если достигли максимального уровня, сбрасываем лишний опыт
+//        }
+//
+//        if (level >= 100) {
+//            level = 100;
+//            current_xp = 0; // Чтобы не было накопленного опыта выше лимита
+//        }
+//
+//        // Обновляем данные в базе
+//        String updateQuery = "UPDATE player_stats SET level = ?, current_xp = ?, required_xp = ? WHERE uuid = ?";
+//        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+//            statement.setInt(1, level);
+//            statement.setInt(2, current_xp);
+//            statement.setInt(3, required_xp);
+//            statement.setString(4, player.getUniqueId().toString());
+//            statement.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return level;
+//    }
+//
+//
+//
+//
+//    public void add_current_xp(Player player, int addxp) {
+//        String add_current_xp = "UPDATE player_stats SET current_xp = current_xp + ? WHERE uuid = ?";
+//        try (Connection connection = getConnection();
+//             PreparedStatement statement = connection.prepareStatement(add_current_xp)) {
+//
+//            // Получаем текущее значение опыта игрока из базы данных
+//            int current_xp = return_current_xp(player);
+//
+//            // Добавляем новый опыт
+//            int new_current_xp = current_xp + addxp;
+//
+//            // Устанавливаем параметры для SQL запроса
+//            statement.setInt(1, addxp);  // Добавляем новый опыт, а не текущее значение
+//            statement.setString(2, player.getUniqueId().toString());
+//
+//            // Выполняем обновление
+//            statement.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void addXpAndCheckLevel(Player player, int addXp) {
+//        String query = "SELECT current_xp, required_xp, level FROM player_stats WHERE uuid = ?";
+//        String updateQuery = "UPDATE player_stats SET current_xp = ?, level = ?, required_xp = ? WHERE uuid = ?";
+//
+//        try (Connection connection = getConnection();
+//             PreparedStatement selectStatement = connection.prepareStatement(query);
+//             PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+//
+//            // Получаем текущие значения
+//            selectStatement.setString(1, player.getUniqueId().toString());
+//            ResultSet resultSet = selectStatement.executeQuery();
+//
+//            if (resultSet.next()) {
+//                int currentXp = resultSet.getInt("current_xp") + addXp;
+//                int requiredXp = resultSet.getInt("required_xp");
+//                int level = resultSet.getInt("level");
+//
+//                // Проверяем, можно ли повысить уровень
+//                while (currentXp >= requiredXp && level < 100) {
+//
+//                    level++;
+//                    requiredXp = (int) Math.ceil(requiredXp * 1.5);
+//                }
+//
+//                // Обновляем данные в БД
+//                updateStatement.setInt(1, currentXp);
+//                updateStatement.setInt(2, level);
+//                updateStatement.setInt(3, requiredXp);
+//                updateStatement.setString(4, player.getUniqueId().toString());
+//                updateStatement.executeUpdate();
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//
+//
 
 }
