@@ -61,6 +61,15 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/OWNER/REPOSITORY</url>
+        </repository>
+    </distributionManagement>
+
+
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
