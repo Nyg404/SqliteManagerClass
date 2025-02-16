@@ -8,6 +8,7 @@ on:
     branches:
       - main  # Или нужная ветка
 
+
 jobs:
   build:
 
