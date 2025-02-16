@@ -50,13 +50,6 @@
         </resources>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/Nyg404/SqliteManagerClass</url>  <!-- Замените 'Nyg404' на ваше имя пользователя и 'SqliteManagerClass' на ваш репозиторий -->
-        </repository>
-    </distributionManagement>
-
     <repositories>
         <repository>
             <id>papermc-repo</id>
@@ -65,10 +58,6 @@
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/Nyg404/SqliteManagerClass</url>  <!-- Замените на ваш репозиторий -->
         </repository>
     </repositories>
 
@@ -89,6 +78,7 @@
             <artifactId>HikariCP</artifactId>
             <version>6.2.1</version>
         </dependency>
-    </dependencies>
 
+
+    </dependencies>
 </project>
