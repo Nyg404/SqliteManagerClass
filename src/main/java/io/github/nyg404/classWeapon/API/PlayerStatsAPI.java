@@ -31,6 +31,10 @@ public class PlayerStatsAPI {
         return initialization.return_level(player);
     }
 
+    public String return_class_player(Player player){
+        return initialization.return_class(player);
+    }
+
     public int check_level(Player player){
         return initialization.return_level(player);
     }

@@ -182,6 +182,29 @@ public class SqliteManager {
         return level;
     }
 
+    public String return_class(Player player) {
+        String return_class = "SELECT class_name FROM player_classes " +
+                "JOIN players ON players.id_class = player_classes.id " +
+                "WHERE players.uuid = ?";
+        String playerClass = null;
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(return_class)) {
+
+            statement.setString(1, player.getUniqueId().toString());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                playerClass = resultSet.getString("class_name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return playerClass;
+    }
+
+
 
     public int check_level(Player player) {
         int current_xp = return_current_xp(player); // Получаем текущий опыт
