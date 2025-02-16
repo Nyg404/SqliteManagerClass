@@ -21,7 +21,7 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "MY_GITHUB_NAME=${{ secrets.MY_GITHUB_NAME }}" >> $GITHUB_ENV
+          echo "MY_GITHUB_NAME=${{ github.actor }}" >> $GITHUB_ENV
           echo "MY_GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }}" >> $GITHUB_ENV
       
 
