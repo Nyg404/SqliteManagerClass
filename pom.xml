@@ -50,6 +50,14 @@
         </resources>
     </build>
 
+    <!-- Указываем репозиторий для публикации на GitHub Packages -->
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/yourusername/your-repo</url>
+        </repository>
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>papermc-repo</id>
@@ -58,6 +66,11 @@
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <!-- Добавляем репозиторий GitHub Packages -->
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/yourusername/your-repo</url>
         </repository>
     </repositories>
 
@@ -78,7 +91,6 @@
             <artifactId>HikariCP</artifactId>
             <version>6.2.1</version>
         </dependency>
-
-
     </dependencies>
+
 </project>
