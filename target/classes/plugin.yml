@@ -1,0 +1,13 @@
+name: classundweapon
+version: '1.0.0'
+main: io.github.nyg404.classWeapon.ClassWeapon
+api-version: '1.21'
+authors: [ Nagust ]
+description: Просто плагин minecraft
+commands:
+  admincreateclass:
+  adminaddplayer:
+  addxp:
+  score:
+  checklevel:
+  reloadclassweapon:

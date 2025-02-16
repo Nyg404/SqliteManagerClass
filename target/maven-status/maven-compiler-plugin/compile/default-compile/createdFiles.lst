@@ -1,0 +1,12 @@
+io\github\nyg404\classWeapon\Commads\Addplayer.class
+io\github\nyg404\classWeapon\Sqlite\SqliteManager.class
+io\github\nyg404\classWeapon\ClassWeapon.class
+io\github\nyg404\classWeapon\API\PlayerStatsAPI.class
+io\github\nyg404\classWeapon\Commads\Addxp.class
+io\github\nyg404\classWeapon\Scoreboard.class
+io\github\nyg404\classWeapon\Commads\AdminCommands\ReloadPlugin.class
+io\github\nyg404\classWeapon\Commads\AdminCreateclass.class
+io\github\nyg404\classWeapon\API\Initialization.class
+io\github\nyg404\classWeapon\Commads\Check.class
+io\github\nyg404\classWeapon\ConfigManager.class
+io\github\nyg404\classWeapon\Commads\Scored.class
