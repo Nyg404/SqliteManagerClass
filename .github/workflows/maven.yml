@@ -24,7 +24,7 @@ jobs:
 
       - name: Build and Deploy with Maven
         run: |
-          mvn clean deploy --settings C:\Users\stasm\.m2\settings.xml
+          mvn clean deploy --settings .github/maven/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
