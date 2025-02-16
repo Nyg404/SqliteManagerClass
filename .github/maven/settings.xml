@@ -30,7 +30,7 @@
         <server>
             <id>github</id>
             <username>Nyg404</username>
-            <password>${{ env.GITHUB_TOKEN }}</password> <!-- Используем секрет -->
+            <password>${{ env.MY_GITHUB_TOKEN }}</password> <!-- Используем секрет -->
         </server>
     </servers>
 </settings>
