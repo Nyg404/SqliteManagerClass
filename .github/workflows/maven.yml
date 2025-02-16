@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '21'
-          distribution: 'terminal'
+          distribution: 'adoptopenjdk'
 
       # Запуск Maven для сборки и публикации пакета
       - name: Build and Deploy with Maven
