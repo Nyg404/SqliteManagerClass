@@ -38,6 +38,6 @@ jobs:
         id: create_release
         run: |
             RELEASE_TAG="build-${GITHUB_SHA}"
-            gh release create $RELEASE_TAG build/libs/*.jar --title "Release $RELEASE_TAG" --notes "Automated release for commit $GITHUB_SHA"
+            gh release create $RELEASE_TAG target*.jar --title "Release $RELEASE_TAG" --notes "Automated release for commit $GITHUB_SHA"
         env:
             GITHUB_TOKEN: ${{ github.token }}
