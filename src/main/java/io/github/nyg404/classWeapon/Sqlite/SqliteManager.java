@@ -113,8 +113,7 @@ public class SqliteManager {
     public boolean newclass(String nameClass){
         String newclass = "INSERT INTO player_classes(class_name) VALUES(?)";
         try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(newclass)) {
-            statement.setInt(1, 0);
-            statement.setString(2, nameClass);
+            statement.setString(1, nameClass);
             statement.executeUpdate();
             return true;
         } catch (SQLException e){

@@ -61,12 +61,6 @@ public class PlayerStatisteck {
 
     public void setCurrent_xp(int current_xp) {
 
-        if(level >= 100){
-            return;
-        } else {
-            setRequired_xp((int) Math.ceil(required_xp * 1.01));
-        }
-
         this.current_xp = current_xp;
         try {
             PreparedStatement preparedStatement = sqliteManager.getConnection().prepareStatement("UPDATE player_stats SET current_xp = ? WHERE uuid = ?");
