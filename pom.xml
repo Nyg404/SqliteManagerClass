@@ -6,7 +6,7 @@
 
     <groupId>io.github.nyg404</groupId>
     <artifactId>class-und-weapon</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.1.1</version>
     <packaging>jar</packaging>
 
     <name>class-und-weapon</name>
@@ -78,11 +78,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.46.1.2</version>
-        </dependency>
-        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>6.2.1</version>
@@ -98,6 +93,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.36</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version> <!-- Версию можно обновить -->
         </dependency>
 
 

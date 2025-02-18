@@ -1,6 +1,6 @@
 package io.github.nyg404.classWeapon.Commads;
 
-import io.github.nyg404.classWeapon.Sqlite.SqliteManager;
+import io.github.nyg404.classWeapon.Sqlite.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,7 +32,7 @@ public class Addplayer implements CommandExecutor {
         }
 
         for (Player matched : matchedPlayers) {
-            SqliteManager.getInstance().addplayer(matched);
+            DataManager.getInstance().addplayer(matched);
             sender.sendMessage("Игрок " + matched.getName() + " добавлен в базу данных.");
         }
 

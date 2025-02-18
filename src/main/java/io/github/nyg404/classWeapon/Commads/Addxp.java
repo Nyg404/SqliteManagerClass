@@ -1,6 +1,8 @@
 package io.github.nyg404.classWeapon.Commads;
 
-import io.github.nyg404.classWeapon.API.PlayerStatisteck;
+
+import io.github.nyg404.classWeapon.API.PlayerStats;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,9 +37,9 @@ public class Addxp implements CommandExecutor {
             return false;
         }
 
-        PlayerStatisteck playerStatisteck = new PlayerStatisteck(target);
+        PlayerStats player_stats = new PlayerStats(target);
 
-        playerStatisteck.setCurrent_xp(playerStatisteck.getCurrent_xp() + addxp);
+        player_stats.setCurrentXp(addxp, true);
 
 
         return true;

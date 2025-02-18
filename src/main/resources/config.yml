@@ -1,10 +1,3 @@
-database:
-  type: "sqlite" # или "mysql"
-  sqlite:
-    file: "database.db"
-  mysql:
-    host: "localhost"
-    port: 3306
-    database: "minecraft"
-    user: "root"
-    password: "password"
+jdbc: ""
+user: ""
+password: ""
