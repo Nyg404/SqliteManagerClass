@@ -35,12 +35,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
             tag_name: latest
-            release_name: "Latest Release"
+            name: "Latest Release"
             draft: false
             prerelease: false
             files: target/*.jar
         env:
-            GITHUB_TOKEN: ${{ github.workspace }}
+            GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
       - name: 🛑 Debug if Upload Failed
         if: failure()
