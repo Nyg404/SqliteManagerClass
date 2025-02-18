@@ -41,6 +41,10 @@ jobs:
             files: target/*.jar
         env:
             GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -s .github/maven/settings.xml
+        env:
+            GITHUB_TOKEN: ${{ github.token }}
 
       - name: 🛑 Debug if Upload Failed
         if: failure()
