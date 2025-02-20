@@ -30,6 +30,8 @@ jobs:
 
       - name: ⚙️ билд
         run: mvn -B package --file pom.xml
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Проверить содержимое target/
         run: ls -lh target/
