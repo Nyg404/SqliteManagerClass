@@ -70,7 +70,7 @@ public class PlayerStatsApi {
         }
         this.oldlevel = this.level;
         this.level = level;
-
+        
         try {
             PreparedStatement preparedStatement = dataManager.connection().prepareStatement("UPDATE player_stats SET level = ? WHERE uuid = ?");
             preparedStatement.setInt(1, level);
