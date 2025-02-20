@@ -25,6 +25,9 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
 
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -s .github/maven/settings.xml
+
       - name: ⚙️ билд
         run: mvn -B package --file pom.xml
 
@@ -35,7 +38,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
             tag_name: latest
-            name: "Я не помню..."
+            name: "Latest Release"
             draft: false
             prerelease: false
             files: target/*.jar
