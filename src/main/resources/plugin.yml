@@ -1,5 +1,5 @@
 name: classundweapon
-version: '1.0.1.3'
+version: '1.0.1.4'
 main: io.github.nyg404.classWeapon.ClassWeapon
 api-version: '1.21'
 authors: [ Nagust ]
