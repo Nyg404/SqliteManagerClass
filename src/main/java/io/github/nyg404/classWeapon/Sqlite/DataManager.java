@@ -29,12 +29,9 @@ public class DataManager {
 
 
 
-
-    // static FileConfiguration file = YAMLManager.require("classundweapon", "config.yml");
-    // private static final String jdbc = file.getString("jdbc");
-    private String jdbc = "jdbc:mysql://u77878_Gq2yCxJIZ0:O%2BrHK6CjeKrNTvFzOi.RrF.e@d8.aurorix.net:3306/s77878_new";
+    static FileConfiguration file = YAMLManager.require("classundweapon", "config.yml");
+    private static final String jdbc = file.getString("jdbc");
                 
-
     // Метод для соединения с базой данных?
     public Connection connection(){
         try{

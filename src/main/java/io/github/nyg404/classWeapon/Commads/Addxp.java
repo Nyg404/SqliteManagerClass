@@ -1,7 +1,7 @@
 package io.github.nyg404.classWeapon.Commads;
 
 
-import io.github.nyg404.classWeapon.API.PlayerStats;
+import io.github.nyg404.classWeapon.API.PlayerStatsApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -37,7 +37,7 @@ public class Addxp implements CommandExecutor {
             return false;
         }
 
-        PlayerStats player_stats = new PlayerStats(target);
+        PlayerStatsApi player_stats = new PlayerStatsApi(target);
 
         player_stats.setCurrentXp(addxp, true);
 

@@ -6,6 +6,8 @@ authors: [ Nagust ]
 description: Просто плагин minecraft
 depend:
   - TailsLib
+softdepend:
+  - Placeholder
 commands:
   admincreateclass:
   adminaddplayer:
