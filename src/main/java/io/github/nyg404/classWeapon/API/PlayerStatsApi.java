@@ -25,6 +25,7 @@ public class PlayerStatsApi {
 
     private @Getter int currentXp;
 
+
     @Getter
     private int oldlevel;
 
