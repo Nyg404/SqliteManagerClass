@@ -25,10 +25,6 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
 
-      - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -s .github/maven/settings.xml
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
 
       - name: ⚙️ билд
         run: mvn -B package --file pom.xml
