@@ -97,6 +97,7 @@ public class DataManager {
         } catch (SQLException exception) {
             // TODO: handle exception
             exception.printStackTrace();
+
         }
     }
 
