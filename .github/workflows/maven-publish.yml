@@ -39,17 +39,17 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-            tag_name: latest
-            name: "Latest Release"
-            draft: false
-            prerelease: false
-            files: target/*.jar
+          tag_name: latest
+          name: "Latest Release"
+          draft: false
+          prerelease: false
+          files: target/*.jar
         env:
-            GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       - name: Publish to GitHub Packages Apache Maven
         run: mvn deploy -s .github/maven/settings.xml
         env:
-            GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: 🛑 Debug if Upload Failed
         if: failure()
