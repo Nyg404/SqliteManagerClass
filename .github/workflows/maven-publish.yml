@@ -24,8 +24,6 @@ jobs:
           distribution: 'temurin'
           server-id: github
           settings-path: ${{ github.workspace }}
-
-
       - name: ⚙️ билд
         run: mvn -B package --file pom.xml
         env:
